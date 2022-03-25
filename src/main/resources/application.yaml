@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gitty
+  data.mongodb.uri: mongodb://localhost:27017/gitty
+server:
+  port: 8088
