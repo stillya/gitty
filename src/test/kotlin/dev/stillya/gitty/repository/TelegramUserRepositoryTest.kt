@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -36,7 +37,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
     @Test
     fun `get user by chat id`() {
 
-        val inserted: TelegramUser? = mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", false)).block()
+        mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", false)).block()
 
         runBlocking {
             val user = repository.getUserByChatId("1").first()
@@ -46,6 +47,17 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
             assertEquals(false, user.isFinished)
         }
 
+    }
+
+    @Test
+    fun `get finished user by chat id`() {
+        assertThrows<java.util.NoSuchElementException> {
+            mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", true)).block()
+
+            runBlocking {
+                repository.getUserByChatId("1").first()
+            }
+        }
     }
 
     @Test
