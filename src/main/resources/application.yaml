@@ -9,4 +9,3 @@ server:
 telegram:
   bot.name: tg_gitty_bot
   bot.token: XXX
-  
