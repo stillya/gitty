@@ -4,3 +4,9 @@ spring:
   data.mongodb.uri: mongodb://localhost:27017/gitty
 server:
   port: 8088
+
+
+telegram:
+  bot.name: tg_gitty_bot
+  bot.token: XXX
+  
