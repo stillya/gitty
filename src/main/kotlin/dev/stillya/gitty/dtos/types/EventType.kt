@@ -1,4 +1,4 @@
-package dev.stillya.gitty.services.bot.types
+package dev.stillya.gitty.dtos.types
 
 enum class EventType {
     PIPELINE,

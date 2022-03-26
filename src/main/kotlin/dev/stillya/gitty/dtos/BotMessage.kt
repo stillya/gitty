@@ -1,4 +1,4 @@
-package dev.stillya.gitty.services.bot.dto
+package dev.stillya.gitty.dtos
 
 data class BotMessage(
     val text: String,

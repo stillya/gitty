@@ -1,7 +1,7 @@
 package dev.stillya.gitty.services.bot.telegram
 
 import dev.stillya.gitty.services.bot.Bot
-import dev.stillya.gitty.services.bot.dto.BotMessage
+import dev.stillya.gitty.dtos.BotMessage
 import org.springframework.beans.factory.annotation.Value
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramWebhookBot
