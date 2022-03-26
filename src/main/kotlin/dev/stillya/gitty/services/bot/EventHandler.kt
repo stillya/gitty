@@ -1,9 +1,8 @@
 package dev.stillya.gitty.services.bot
 
-import dev.stillya.gitty.services.bot.dto.BotEvent
 import dev.stillya.gitty.services.bot.types.EventType
 
-interface EventHandler {
+interface EventHandler<T> {
     abstract val type: EventType
-    fun handle(event: BotEvent)
+    fun handle(event: T)
 }
