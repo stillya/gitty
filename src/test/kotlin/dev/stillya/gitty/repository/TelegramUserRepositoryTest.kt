@@ -37,13 +37,14 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
     @Test
     fun `get user by chat id`() {
 
-        mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", false)).block()
+        mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), false)).block()
 
         runBlocking {
             val user = repository.getUserByChatId("1").first()
             assertEquals("1", user.chatId)
-            assertEquals("firstName", user.firstName)
-            assertEquals("secondName", user.secondName)
+            assertEquals("firstName", user.username)
+            assertEquals("secondName", user.name)
+            assertEquals("merge", user.eventTypes!![0])
             assertEquals(false, user.isFinished)
         }
 
@@ -52,7 +53,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
     @Test
     fun `get finished user by chat id`() {
         assertThrows<java.util.NoSuchElementException> {
-            mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", true)).block()
+            mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), true)).block()
 
             runBlocking {
                 repository.getUserByChatId("1").first()
@@ -63,12 +64,13 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
     @Test
     fun save() {
         runBlocking {
-            repository.save(TelegramUser("1", "firstName", "secondName", false))
+            repository.save(TelegramUser("1", "firstName", "secondName", listOf("merge"), false))
 
             val user = repository.getUserByChatId("1").first()
             assertEquals("1", user.chatId)
-            assertEquals("firstName", user.firstName)
-            assertEquals("secondName", user.secondName)
+            assertEquals("firstName", user.username)
+            assertEquals("secondName", user.name)
+            assertEquals("merge", user.eventTypes!![0])
             assertEquals(false, user.isFinished)
 
         }

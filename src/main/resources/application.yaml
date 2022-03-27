@@ -6,6 +6,9 @@ server:
   port: 8088
 
 
+gitlab:
+  baseUrl: some_url
+
 telegram:
   bot.name: tg_gitty_bot
   bot.token: XXX

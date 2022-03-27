@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document
 data class TelegramUser(
     @Id val chatId: String? = null,
-    val firstName: String? = null,
-    val secondName: String? = null,
+    val username: String? = null,
+    val name: String? = null,
+    val eventTypes: List<String>? = null,
+    val id: String? = null,
     val isFinished: Boolean? = null
 )
