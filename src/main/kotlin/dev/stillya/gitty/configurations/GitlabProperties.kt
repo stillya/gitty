@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConstructorBinding
 @ConfigurationProperties(prefix = "gitlab")
 data class GitlabProperties(
-    val baseUrl: String
+    val baseUrl: String,
+    val token: String
 )

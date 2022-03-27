@@ -17,8 +17,8 @@ class TelegramMessageHandler(
         val command = messageParts[0]
         val args = messageParts.drop(1)
 
-        return when (command) {
-            "/start" ->
+        return when (command.removePrefix("/")) {
+            "start" ->
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
@@ -95,12 +95,12 @@ class TelegramMessageHandler(
                 "I'm a bot that can help you manage your Gitlab repositories.\n" +
                 "You can use me to get notification about pipelines and merge requests\n" +
                 "---------------------------HOW TO USE IT?----------------------------\n" +
-                "1.SUBSCRIBE(any register): subscribe <event> <GITLAB-TOKEN>\n" +
-                "2.UNSUBSCRIBE(Any register): unsubscribe\n" +
-                "3.HELP(Any register): help\n" +
+                "1. SUBSCRIBE(any register): subscribe <event> <GITLAB-TOKEN>\n" +
+                "2. UNSUBSCRIBE(Any register): unsubscribe\n" +
+                "3. HELP(Any register): help\n" +
                 "---------------------------TYPE OF EVENTS----------------------------\n" +
-                "1.For getting notification about pipelines: pipeline\n" +
-                "2.For getting notification about merge requests: merge\n" +
+                "1. For getting notification about pipelines: pipeline\n" +
+                "2. For getting notification about merge requests: merge\n" +
                 "---------------------------EXAMPLES----------------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
                 "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
