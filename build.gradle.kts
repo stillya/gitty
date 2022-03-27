@@ -28,6 +28,7 @@ dependencies {
 	// telegram
 	implementation("org.telegram:telegrambots-spring-boot-starter:5.7.1")
 	// test
+	testImplementation("io.mockk:mockk:1.12.3")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.testcontainers:mongodb:1.16.3")

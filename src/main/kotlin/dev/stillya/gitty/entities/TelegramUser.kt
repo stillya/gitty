@@ -9,6 +9,6 @@ data class TelegramUser(
     val username: String? = null,
     val name: String? = null,
     val eventTypes: List<String>? = null,
-    val id: String? = null,
+    val id: Int? = null,
     val isFinished: Boolean? = null
 )

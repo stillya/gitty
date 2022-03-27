@@ -21,21 +21,21 @@ class TelegramMessageHandler(
         when (command) {
             "/start" -> bot.sendMessage(
                 BotMessage(
-                    channel, HELP_MESSAGE
+                    HELP_MESSAGE, channel
                 )
             )
             "help" -> bot.sendMessage(
                 BotMessage(
-                    channel, HELP_MESSAGE
+                    HELP_MESSAGE, channel
                 )
             )
             "subscribe" -> {
                 val type = args[0]
                 val token = args[1]
-                if (EventType.valueOf(type) == EventType.UNKNOWN) {
+                if (from(type) == EventType.UNKNOWN) {
                     bot.sendMessage(
                         BotMessage(
-                            channel, "Unknown event type: $type"
+                            "Unknown event type: $type", channel
                         )
                     )
                     return
@@ -44,21 +44,21 @@ class TelegramMessageHandler(
                     gitlabClient.getUser(token).onFailure {
                         bot.sendMessage(
                             BotMessage(
-                                channel, "Error happened while getting user: ${it.message}"
+                                "Error happened while getting user: ${it.message}", channel
                             )
                         )
                     }.onSuccess {
-                        telegramUserRepository.save(TelegramUser(channel, it.username, it.name, listOf(type)))
+                        telegramUserRepository.save(TelegramUser(channel, it.username, it.name, listOf(type), it.id, false))
                         bot.sendMessage(
                             BotMessage(
-                                channel, "You are now subscribed to $type events"
+                                "You are now subscribed to $type events", channel
                             )
                         )
                     }
                 } else {
                     bot.sendMessage(
                         BotMessage(
-                            channel, "You not provide type or token"
+                            "You not provide type or token", channel
                         )
                     )
                 }
@@ -83,10 +83,10 @@ class TelegramMessageHandler(
                 "2.For getting notification about merge requests: merge\n" +
                 "---------------------------EXAMPLES----------------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
-                "> subscribe merge\n" +
+                "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
                 "> unsubscribe\n" +
                 "> help\n"
 
-        fun from(type: String?): EventType = EventType.values().find { it.name == type } ?: EventType.UNKNOWN
+        fun from(type: String?): EventType = EventType.values().find { it.value == type } ?: EventType.UNKNOWN
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @ConstructorBinding
 @ConfigurationProperties(prefix = "gitlab")
-data class GitlabProperties {
+data class GitlabProperties(
     val baseUrl: String
-}
+)

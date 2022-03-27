@@ -7,7 +7,7 @@ server:
 
 
 gitlab:
-  baseUrl: some_url
+  baseUrl: http://cm-dev.fisgroup.ru:8888/
 
 telegram:
   bot.name: tg_gitty_bot
