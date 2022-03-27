@@ -15,6 +15,11 @@ class TelegramUserRepository(private val mongo: ReactiveFluentMongoOperations) {
             .awaitOneOrNull()
     }
 
+    suspend fun getUserByUsername(username: String): TelegramUser? {
+        return mongo.query<TelegramUser>().matching(query(where("username").isEqualTo(username)).addCriteria(where("isFinished").isEqualTo(false)))
+            .awaitOneOrNull()
+    }
+
     suspend fun update(user: TelegramUser) {
         mongo.update<TelegramUser>().replaceWith(user).asType<TelegramUser>().findReplaceAndAwait()
     }

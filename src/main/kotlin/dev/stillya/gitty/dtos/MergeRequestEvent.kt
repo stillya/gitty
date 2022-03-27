@@ -16,6 +16,6 @@ data class MergeRequestDto(
     @JsonProperty("source_branch") val sourceBranch: String?,
     @JsonProperty("target_branch") val targetBranch: String?,
     @JsonProperty("url") val url: String?,
-    @JsonProperty("merge_status") val status: String?,
+    @JsonProperty("state") val status: String?,
     @JsonProperty("title") val title: String?
 )

@@ -1,38 +1,18 @@
 package dev.stillya.gitty.services.bot.telegram
 
+import com.github.kotlintelegrambot.entities.ChatId
 import dev.stillya.gitty.dtos.BotMessage
 import dev.stillya.gitty.services.bot.Bot
-import org.springframework.beans.factory.annotation.Value
+import mu.KLogging
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.bots.DefaultBotOptions
-import org.telegram.telegrambots.bots.TelegramWebhookBot
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.Update
 
 @Service
-class GitlabTelegramBot : TelegramWebhookBot(), Bot {
+class GitlabTelegramBot(private val bot: com.github.kotlintelegrambot.Bot) : Bot {
 
-    @Value("\${telegram.bot.name}")
-    private lateinit var botName: String
-
-    @Value("\${telegram.bot.name}")
-    private lateinit var botToken: String
-
+    companion object : KLogging()
 
     override fun sendMessage(message: BotMessage) {
-        execute(SendMessage.builder().chatId(message.channel).text(message.text).build())
-    }
-
-    override fun onWebhookUpdateReceived(update: Update?): BotApiMethod<*> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getBotUsername(): String = botName
-
-    override fun getBotToken(): String = botToken
-
-    override fun getBotPath(): String {
-        TODO("Not yet implemented")
+        val res = bot.sendMessage(ChatId.fromId(message.channel.toLong()), message.text)
+        logger.info { "Message sent: ${res.first} ${res.second}" }
     }
 }
