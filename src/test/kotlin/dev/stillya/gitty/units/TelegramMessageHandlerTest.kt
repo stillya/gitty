@@ -7,7 +7,7 @@ import dev.stillya.gitty.repositories.TelegramUserRepository
 import dev.stillya.gitty.services.bot.telegram.GitlabTelegramBot
 import dev.stillya.gitty.services.bot.telegram.TelegramMessageHandler
 import dev.stillya.gitty.services.git.GitClient
-import dev.stillya.gitty.services.git.dtos.UserDto
+import dev.stillya.gitty.dtos.UserDto
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
