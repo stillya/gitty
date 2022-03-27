@@ -40,7 +40,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
         mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, false)).block()
 
         runBlocking {
-            val user = repository.getUserByChatId("1").first()
+            val user = repository.getUserByChatId("1")!!
             assertEquals("1", user.chatId)
             assertEquals("firstName", user.username)
             assertEquals("secondName", user.name)
@@ -57,7 +57,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
             mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, true)).block()
 
             runBlocking {
-                repository.getUserByChatId("1").first()
+                repository.getUserByChatId("1")
             }
         }
     }
@@ -67,7 +67,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
         runBlocking {
             repository.save(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, false))
 
-            val user = repository.getUserByChatId("1").first()
+            val user = repository.getUserByChatId("1")!!
             assertEquals("1", user.chatId)
             assertEquals("firstName", user.username)
             assertEquals("secondName", user.name)

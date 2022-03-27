@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class TelegramMessageHandler(
-    private val bot: GitlabTelegramBot,
     private val telegramUserRepository: TelegramUserRepository,
     private val gitlabClient: GitClient
 ) {
@@ -28,6 +27,11 @@ class TelegramMessageHandler(
                     HELP_MESSAGE, channel
                 )
             "subscribe" -> {
+                if (args.size != 2) {
+                    return BotMessage(
+                        "Invalid arguments. Usage: subscribe <event> <GITLAB-TOKEN>", channel
+                    )
+                }
                 val type = args[0]
                 val token = args[1]
                 if (from(type) == EventType.UNKNOWN) {
@@ -43,19 +47,34 @@ class TelegramMessageHandler(
                             "Error happened while getting user: ${user.exceptionOrNull()}", channel
                         )
                     } else {
-                        telegramUserRepository.save(
-                            TelegramUser(
-                                channel,
-                                user.getOrThrow().username,
-                                user.getOrThrow().name,
-                                listOf(type),
-                                user.getOrThrow().id,
-                                false
+                        telegramUserRepository.getUserByChatId(channel)?.let {
+                            if (it.eventTypes!!.contains(type)) {
+                                return BotMessage(
+                                    "You already subscribed to $type events", channel
+                                )
+                            } else {
+                                telegramUserRepository.update(
+                                    TelegramUser(it.chatId, it.username, it.name, it.eventTypes.plus(type), it.id, it.isFinished)
+                                )
+                                BotMessage(
+                                    "You are now subscribed to $type events too", channel
+                                )
+                            }
+                        }?: run {
+                            telegramUserRepository.save(
+                                TelegramUser(
+                                    channel,
+                                    user.getOrThrow().username,
+                                    user.getOrThrow().name,
+                                    listOf(type),
+                                    user.getOrThrow().id,
+                                    false
+                                )
                             )
-                        )
-                        BotMessage(
-                            "You are now subscribed to $type events", channel
-                        )
+                            return BotMessage(
+                                "You are now subscribed to $type events", channel
+                            )
+                        }
                     }
                 } else {
                     return BotMessage(
@@ -77,8 +96,8 @@ class TelegramMessageHandler(
                 "You can use me to get notification about pipelines and merge requests\n" +
                 "---------------------------HOW TO USE IT?----------------------------\n" +
                 "1.SUBSCRIBE(any register): subscribe <event> <GITLAB-TOKEN>\n" +
-                "2. UNSUBSCRIBE(Any register): unsubscribe\n" +
-                "3. HELP(Any register): help\n" +
+                "2.UNSUBSCRIBE(Any register): unsubscribe\n" +
+                "3.HELP(Any register): help\n" +
                 "---------------------------TYPE OF EVENTS----------------------------\n" +
                 "1.For getting notification about pipelines: pipeline\n" +
                 "2.For getting notification about merge requests: merge\n" +
