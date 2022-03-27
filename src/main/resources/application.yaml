@@ -1,14 +1,16 @@
 spring:
   application:
     name: gitty
+  webflux:
+    base-path: /gitty
   data.mongodb.uri: mongodb://localhost:27017/gitty
 server:
   port: 8088
 
 
 gitlab:
-  baseUrl: http://cm-dev.fisgroup.ru:8888/
+  baseUrl: *
 
 telegram:
   bot.name: tg_gitty_bot
-  bot.token: XXX
+  bot.token: *

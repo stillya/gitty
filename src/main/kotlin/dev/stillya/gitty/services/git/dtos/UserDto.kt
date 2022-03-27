@@ -1,3 +1,5 @@
 package dev.stillya.gitty.services.git.dtos
 
-data class UserDto(val username: String?, val name: String?, val id: Int?)
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class UserDto(@JsonProperty("username") val username: String?, @JsonProperty("name") val name: String?, @JsonProperty("id") val id: Int?)

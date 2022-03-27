@@ -13,62 +13,63 @@ class TelegramMessageHandler(
     private val telegramUserRepository: TelegramUserRepository,
     private val gitlabClient: GitClient
 ) {
-    suspend fun handle(channel: String, message: String) {
+    suspend fun handle(channel: String, message: String): BotMessage {
         val messageParts = message.split(" ")
         val command = messageParts[0]
         val args = messageParts.drop(1)
 
-        when (command) {
-            "/start" -> bot.sendMessage(
+        return when (command) {
+            "/start" ->
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
-            )
-            "help" -> bot.sendMessage(
+            "help" ->
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
-            )
             "subscribe" -> {
                 val type = args[0]
                 val token = args[1]
                 if (from(type) == EventType.UNKNOWN) {
-                    bot.sendMessage(
-                        BotMessage(
-                            "Unknown event type: $type", channel
-                        )
+                    return BotMessage(
+                        "Unknown event type: $type", channel
                     )
-                    return
                 }
                 if (type.isNotEmpty() && token.isNotEmpty()) {
-                    gitlabClient.getUser(token).onFailure {
-                        bot.sendMessage(
-                            BotMessage(
-                                "Error happened while getting user: ${it.message}", channel
+                    val user = gitlabClient.getUser(token)
+
+                    return if (user.isFailure) {
+                        BotMessage(
+                            "Error happened while getting user: ${user.exceptionOrNull()}", channel
+                        )
+                    } else {
+                        telegramUserRepository.save(
+                            TelegramUser(
+                                channel,
+                                user.getOrThrow().username,
+                                user.getOrThrow().name,
+                                listOf(type),
+                                user.getOrThrow().id,
+                                false
                             )
                         )
-                    }.onSuccess {
-                        telegramUserRepository.save(TelegramUser(channel, it.username, it.name, listOf(type), it.id, false))
-                        bot.sendMessage(
-                            BotMessage(
-                                "You are now subscribed to $type events", channel
-                            )
+                        BotMessage(
+                            "You are now subscribed to $type events", channel
                         )
                     }
                 } else {
-                    bot.sendMessage(
-                        BotMessage(
-                            "You not provide type or token", channel
-                        )
+                    return BotMessage(
+                        "You not provide type or token", channel
                     )
+
                 }
-
-
             }
+            else -> BotMessage(
+                "Unknown command: $command", channel
+            )
         }
-
-
     }
+
 
     companion object {
         const val HELP_MESSAGE = "Hello, I'm Gitty!\n" +

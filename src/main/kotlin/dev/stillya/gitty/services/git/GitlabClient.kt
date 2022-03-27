@@ -23,11 +23,12 @@ class GitlabClient(
 
     override suspend fun getUser(token: String): Result<UserDto> {
         return kotlin.runCatching {
-            httpClient.get()
+            val result = httpClient.get()
                 .uri { it.path("/api/v4/user").build() }
                 .header("Private-Token", token)
                 .retrieve()
-                .awaitBody()
+                .awaitBody<UserDto>()
+            return Result.success(result)
         }
     }
 }

@@ -10,8 +10,8 @@ import dev.stillya.gitty.services.git.GitClient
 import dev.stillya.gitty.services.git.dtos.UserDto
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TelegramMessageHandlerTest {
@@ -31,10 +31,10 @@ class TelegramMessageHandlerTest {
         runBlocking {
             every { bot.sendMessage(BotMessage(TelegramMessageHandler.HELP_MESSAGE, CHANNEL)) } returns Unit
 
-            messageHandler.handle(CHANNEL, "help")
-            messageHandler.handle(CHANNEL, "/start")
-
-            verify(exactly = 2) { bot.sendMessage(BotMessage(TelegramMessageHandler.HELP_MESSAGE, CHANNEL)) }
+            var result = messageHandler.handle(CHANNEL, "help")
+            assertThat(result).isEqualTo(TelegramMessageHandler.HELP_MESSAGE)
+            result = messageHandler.handle(CHANNEL, "/start")
+            assertThat(result).isEqualTo(BotMessage(TelegramMessageHandler.HELP_MESSAGE, CHANNEL))
         }
     }
 
@@ -63,9 +63,9 @@ class TelegramMessageHandlerTest {
                 )
             } returns Unit
 
-            messageHandler.handle(CHANNEL, "subscribe merge $TOKEN")
+            val result = messageHandler.handle(CHANNEL, "subscribe merge $TOKEN")
 
-            verify(exactly = 1) { bot.sendMessage(BotMessage("You are now subscribed to ${EventType.MERGE_REQUEST.value} events", CHANNEL)) }
+            assertThat(result).isEqualTo(BotMessage("You are now subscribed to ${EventType.MERGE_REQUEST.value} events", CHANNEL))
         }
     }
 }
