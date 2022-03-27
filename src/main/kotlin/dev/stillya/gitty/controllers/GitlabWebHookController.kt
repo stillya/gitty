@@ -1,6 +1,5 @@
 package dev.stillya.gitty.controllers
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import dev.stillya.gitty.dtos.MergeRequestEvent
 import dev.stillya.gitty.services.handlers.EventHandler
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,6 +13,9 @@ class GitlabWebHookController(private val handlers: Collection<EventHandler<*>>)
 
     @PostMapping(path = ["/merge"])
     fun webhook(@RequestBody update: MergeRequestEvent) {
-        println("Received webhook: $update")
+        handlers.find { it.type.value == "merge" }?.let {
+            val h = it as EventHandler<MergeRequestEvent>
+            h.handle(update)
+        }
     }
 }
