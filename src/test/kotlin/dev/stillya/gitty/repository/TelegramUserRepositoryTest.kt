@@ -37,7 +37,7 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
     @Test
     fun `get user by chat id`() {
 
-        mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, false)).block()
+        mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1)).block()
 
         runBlocking {
             val user = repository.getUserByChatId("1")!!
@@ -46,26 +46,14 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
             assertEquals("secondName", user.name)
             assertEquals("merge", user.eventTypes!![0])
             assertEquals(1, user.id)
-            assertEquals(false, user.isFinished)
         }
 
-    }
-
-    @Test
-    fun `get finished user by chat id`() {
-        assertThrows<java.util.NoSuchElementException> {
-            mongo.insert<TelegramUser>().one(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, true)).block()
-
-            runBlocking {
-                repository.getUserByChatId("1")
-            }
-        }
     }
 
     @Test
     fun save() {
         runBlocking {
-            repository.save(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1, false))
+            repository.save(TelegramUser("1", "firstName", "secondName", listOf("merge"), 1))
 
             val user = repository.getUserByChatId("1")!!
             assertEquals("1", user.chatId)
@@ -73,8 +61,6 @@ class TelegramUserRepositoryTest : AbstractMongoTest() {
             assertEquals("secondName", user.name)
             assertEquals("merge", user.eventTypes!![0])
             assertEquals(1, user.id)
-            assertEquals(false, user.isFinished)
-
         }
     }
 

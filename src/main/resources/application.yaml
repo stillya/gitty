@@ -9,9 +9,9 @@ spring:
   data.mongodb.uri: mongodb://localhost:27017/gitty
 
 gitlab:
-  baseUrl: *
-  token: *
+  baseUrl: ${GITLAB_BASE_URL}
+  token: ${GITLAB_TOKEN}
 
 telegram:
-  bot.name: tg_gitty_bot
-  bot.token: *
+  bot.name: ${BOT_NAME}
+  bot.token: ${BOT_TOKEN}

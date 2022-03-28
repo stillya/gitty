@@ -12,7 +12,6 @@ class GitlabTelegramBot(private val bot: com.github.kotlintelegrambot.Bot) : Bot
     companion object : KLogging()
 
     override fun sendMessage(message: BotMessage) {
-        val res = bot.sendMessage(ChatId.fromId(message.channel.toLong()), message.text)
-        logger.info { "Message sent: ${res.first} ${res.second}" }
+        bot.sendMessage(ChatId.fromId(message.channel.toLong()), message.text)
     }
 }

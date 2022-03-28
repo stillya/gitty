@@ -26,6 +26,15 @@ class TelegramMessageHandler(
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
+            "unsubscribe" -> {
+                val res = telegramUserRepository.getUserByChatId(channel)?.let {
+                    it.chatId?.let { it1 -> telegramUserRepository.deleteByChatId(it1) }
+                    "You have been unsubscribed from notifications"
+                } ?: "You are not subscribed to notifications"
+                BotMessage(
+                    res, channel
+                )
+            }
             "subscribe" -> {
                 if (args.size != 2) {
                     return BotMessage(
@@ -54,13 +63,13 @@ class TelegramMessageHandler(
                                 )
                             } else {
                                 telegramUserRepository.update(
-                                    TelegramUser(it.chatId, it.username, it.name, it.eventTypes.plus(type), it.id, it.isFinished)
+                                    TelegramUser(it.chatId, it.username, it.name, it.eventTypes.plus(type), it.id)
                                 )
                                 BotMessage(
                                     "You are now subscribed to $type events too", channel
                                 )
                             }
-                        }?: run {
+                        } ?: run {
                             telegramUserRepository.save(
                                 TelegramUser(
                                     channel,
@@ -68,7 +77,6 @@ class TelegramMessageHandler(
                                     user.getOrThrow().name,
                                     listOf(type),
                                     user.getOrThrow().id,
-                                    false
                                 )
                             )
                             return BotMessage(
@@ -94,14 +102,14 @@ class TelegramMessageHandler(
         const val HELP_MESSAGE = "Hello, I'm Gitty!\n" +
                 "I'm a bot that can help you manage your Gitlab repositories.\n" +
                 "You can use me to get notification about pipelines and merge requests\n" +
-                "---------------------------HOW TO USE IT?----------------------------\n" +
+                "---------------HOW TO USE IT?--------------\n" +
                 "1. SUBSCRIBE(any register): subscribe <event> <GITLAB-TOKEN>\n" +
                 "2. UNSUBSCRIBE(Any register): unsubscribe\n" +
                 "3. HELP(Any register): help\n" +
-                "---------------------------TYPE OF EVENTS----------------------------\n" +
+                "---------------TYPE OF EVENTS--------------\n" +
                 "1. For getting notification about pipelines: pipeline\n" +
                 "2. For getting notification about merge requests: merge\n" +
-                "---------------------------EXAMPLES----------------------------\n" +
+                "-----------------EXAMPLES------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
                 "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
                 "> unsubscribe\n" +
