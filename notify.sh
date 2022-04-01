@@ -1,10 +1,10 @@
 #!/bin/bash
 
-TIME="10"
-URL="https://gitty.shop/gitty/gitlab/pipeline"
+NOTIFY_TIME="10"
+NOTIFY_TIME="https://gitty.shop/gitty/gitlab/pipeline"
+STATUS="success"
 
-curl -s --max-time $TIME --location --request POST $URL -H 'Content-Type: application/json' --data-raw '{ "status": "'"$1"'", "url": "'"$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"'", "mr_id": "'"$CI_MERGE_REQUEST_ID"'", "project_id": "'"$CI_MERGE_REQUEST_PROJECT_ID"'"}' > /dev/null
-
+curl -v --max-time $NOTIFY_TIME --location --request POST $NOTIFY_TIME -H 'Content-Type: application/json' --data-raw '{ "'"$STATUS"'": "success", "url": "'"$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"'", "pipeline_id": "'"$CI_PIPELINE_ID"'", "project_id": "'"$CI_PROJECT_ID"'"}'
 
 ### EXAMPLES
 #TIME="10"
