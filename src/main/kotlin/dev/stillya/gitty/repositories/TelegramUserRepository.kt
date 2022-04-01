@@ -27,6 +27,6 @@ class TelegramUserRepository(private val mongo: ReactiveFluentMongoOperations) {
     suspend fun save(user: TelegramUser): TelegramUser? = mongo.insert<TelegramUser>().oneAndAwait(user)
 
     suspend fun deleteByChatId(chatId: String) {
-        mongo.remove<TelegramUser>().matching(query(where("chatId").isEqualTo(chatId))).allAndAwait()
+        mongo.remove<TelegramUser>().matching(query(where("chatId").isEqualTo(chatId)))
     }
 }

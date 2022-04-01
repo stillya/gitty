@@ -38,6 +38,8 @@ dependencies {
     testImplementation("org.testcontainers:mongodb:1.16.3")
     testImplementation("org.testcontainers:testcontainers:1.16.3")
     testImplementation("org.testcontainers:junit-jupiter:1.16.3")
+    // for M1
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.73.Final:osx-x86_64")
 }
 
 tasks.withType<KotlinCompile> {

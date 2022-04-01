@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class PipelineEvent(
+data class PipelineDto(
+    @JsonProperty("id") val id: String?,
+    @JsonProperty("sha") val sha: String?,
     @JsonProperty("status") val status: String?,
-    @JsonProperty("url") val url: String?,
-    @JsonProperty("pipeline_id") val pipelineId: String?,
-    @JsonProperty("project_id") val projectId: String?,
+    @JsonProperty("user") val user: UserDto?,
 )

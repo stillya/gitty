@@ -23,7 +23,7 @@ class PipelineEventHandler(
 
     override suspend fun handle(event: PipelineEvent) {
         if (event.status == "success" || event.status == "failed") {
-            val mergeRequest = gitClient.getMergeRequests(event.mergeRequestId!!, event.projectId!!)
+            val mergeRequest = gitClient.getMergeRequest(event.pipelineId!!, event.projectId!!)
 
             if (mergeRequest.isFailure) {
                 logger.error { "Failed to get merge request for event: $event" }
@@ -39,7 +39,7 @@ class PipelineEventHandler(
     }
 
     private fun createMessage(event: PipelineEvent, mr: MergeRequestDto): String {
-        return "${statusToEmoji(event.status!!)} Your pipeline has been finish with ${event.status} ${statusToEmoji(event.status)} ️\n\n" +
+        return "${statusToEmoji(event.status!!)} Your pipeline has been finish with ${event.status} ️\n\n" +
                 "Link: ${event.url}" + "\n" +
                 "Source branch: ${mr.sourceBranch}\n" +
                 "Target branch: ${mr.targetBranch}\n"

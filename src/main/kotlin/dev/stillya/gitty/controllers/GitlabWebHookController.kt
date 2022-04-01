@@ -17,7 +17,7 @@ class GitlabWebHookController(private val handlers: Collection<EventHandler<*>>)
 
     @PostMapping(path = ["/merge"])
     suspend fun merge(@RequestBody update: MergeRequestEvent) {
-        logger.info { "Received webhook merge: ${update.mergeRequest!!.status} from ${update.mergeRequest.url}" }
+        logger.info { "Received webhook merge: $update" }
         handlers.find { it.type.value == "merge" }?.let {
             val h = it as EventHandler<MergeRequestEvent>
             h.handle(update)
@@ -26,7 +26,7 @@ class GitlabWebHookController(private val handlers: Collection<EventHandler<*>>)
 
     @PostMapping(path = ["/pipeline"])
     suspend fun pipeline(@RequestBody update: PipelineEvent) {
-        logger.info { "Received webhook pipeline: ${update.status} from ${update.url}" }
+        logger.info { "Received webhook pipeline: $update" }
         handlers.find { it.type.value == "pipeline" }?.let {
             val h = it as EventHandler<PipelineEvent>
             h.handle(update)
