@@ -7,14 +7,15 @@
     <img alt="License: MIT License" src="https://img.shields.io/badge/License-MIT License-yellow.svg" />
   </a>
   <a href="https://twitter.com/elite\_twitt" target="_blank">
-    <img alt="Twitter: elite\_twitt" src="https://img.shields.io/twitter/follow/elite\_twitt.svg?style=social" />
+    <img alt="Twitter: elite_twitt" src="https://img.shields.io/twitter/follow/elite_twitt.svg?style=social" />
   </a>
 </p>
 
 > A small bot for gitlab notification with integration on different platform
 
-## Install
+## Usage
 
+### You gotta change variables in <b>.env</b> on your own 
 ```sh
 docker-compose up -d
 ```
