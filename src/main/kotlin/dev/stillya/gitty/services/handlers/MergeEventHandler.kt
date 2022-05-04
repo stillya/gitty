@@ -36,7 +36,7 @@ class MergeEventHandler(
     }
 
     private fun createMessage(event: MergeRequestEvent): String {
-        return "⚡️ Your merge request *bold*${event.mergeRequest!!.title}*bold* has been ${event.mergeRequest.status} by ${event.mergedByUser} ⚡️\n\n" +
+        return "⚡️ Your merge request **${event.mergeRequest!!.title}** has been ${event.mergeRequest.status} by **${event.mergedByUser!!.username}** ⚡️\n\n" +
                 "Link: ${event.mergeRequest.url}" + "\n" +
                 "Source branch: ${event.mergeRequest.sourceBranch}\n" +
                 "Target branch: ${event.mergeRequest.targetBranch}\n"
