@@ -1,16 +1,20 @@
 package dev.stillya.gitty.services.bot.telegram
 
 import dev.stillya.gitty.dtos.BotMessage
+import dev.stillya.gitty.dtos.OmsuParticipantDto
+import dev.stillya.gitty.dtos.makePrettyTableForTelegram
 import dev.stillya.gitty.dtos.types.EventType
 import dev.stillya.gitty.entities.TelegramUser
 import dev.stillya.gitty.repositories.TelegramUserRepository
+import dev.stillya.gitty.services.bot.omsu.OmsuWebScrapper
 import dev.stillya.gitty.services.git.GitClient
 import org.springframework.stereotype.Service
 
 @Service
 class TelegramMessageHandler(
     private val telegramUserRepository: TelegramUserRepository,
-    private val gitlabClient: GitClient
+    private val gitlabClient: GitClient,
+    private val omsuWebScrapper: OmsuWebScrapper
 ) {
     suspend fun handle(channel: String, message: String): BotMessage {
         val messageParts = message.split(" ")
@@ -22,10 +26,12 @@ class TelegramMessageHandler(
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
+
             "help" ->
                 BotMessage(
                     HELP_MESSAGE, channel
                 )
+
             "unsubscribe" -> {
                 val res = telegramUserRepository.getUserByChatId(channel)?.let {
                     it.chatId?.let { it1 -> telegramUserRepository.deleteByChatId(it1) }
@@ -35,6 +41,7 @@ class TelegramMessageHandler(
                     res, channel
                 )
             }
+
             "subscribe" -> {
                 if (args.size != 2) {
                     return BotMessage(
@@ -91,6 +98,26 @@ class TelegramMessageHandler(
 
                 }
             }
+
+            "fromIlyaWithLove" -> {
+                if (args.size != 2) {
+                    return BotMessage(
+                        "Invalid arguments. Usage: fromilyawithlove <number-of-your-speciality>", channel
+                    )
+                }
+                val number = args[0]
+
+                val participants = omsuWebScrapper.getOmsuParticipants(number)
+
+                return if (participants.first.isNotEmpty()) {
+                    BotMessage(makePrettyTableForTelegram(participants), channel)
+                } else {
+                    BotMessage(
+                        "No participants found", channel
+                    )
+                }
+            }
+
             else -> BotMessage(
                 "Unknown command: $command", channel
             )
@@ -106,12 +133,15 @@ class TelegramMessageHandler(
                 "1. SUBSCRIBE(any register): subscribe <event> <GITLAB-TOKEN>\n" +
                 "2. UNSUBSCRIBE(Any register): unsubscribe\n" +
                 "3. HELP(Any register): help\n" +
+                "4. FROMILYAWITHLOVE(Any register): fromIlyaWithLove <number-of-your-speciality>\n" +
                 "---------------TYPE OF EVENTS--------------\n" +
                 "1. For getting notification about pipelines: pipeline\n" +
                 "2. For getting notification about merge requests: merge\n" +
+                "3. If you sweaty penguin: FROMILYAWITHLOVE" +
                 "-----------------EXAMPLES------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
                 "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
+                "> fromilyawithlove 7856\n" +
                 "> unsubscribe\n" +
                 "> help\n"
 

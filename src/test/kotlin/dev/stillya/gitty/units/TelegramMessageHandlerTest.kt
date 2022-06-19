@@ -5,6 +5,7 @@ import dev.stillya.gitty.dtos.UserDto
 import dev.stillya.gitty.dtos.types.EventType
 import dev.stillya.gitty.entities.TelegramUser
 import dev.stillya.gitty.repositories.TelegramUserRepository
+import dev.stillya.gitty.services.bot.omsu.OmsuWebScrapper
 import dev.stillya.gitty.services.bot.telegram.TelegramMessageHandler
 import dev.stillya.gitty.services.git.GitClient
 import io.mockk.every
@@ -17,7 +18,7 @@ class TelegramMessageHandlerTest {
     private val telegramUserRepository: TelegramUserRepository = mockk()
     private val gitlabClient: GitClient = mockk()
 
-    private val messageHandler = TelegramMessageHandler(telegramUserRepository, gitlabClient)
+    private val messageHandler = TelegramMessageHandler(telegramUserRepository, gitlabClient, OmsuWebScrapper())
 
     companion object {
         const val CHANNEL = "test"

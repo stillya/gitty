@@ -25,10 +25,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-//    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor-kotlin")
     // telegram
     implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.6")
     implementation("org.telegram:telegrambots-spring-boot-starter:5.7.1")
+    // scrapper
+    implementation("org.jsoup:jsoup:1.15.1")
     // logging
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.20")
     // test
