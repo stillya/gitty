@@ -14,49 +14,60 @@ class OmsuWebScrapper {
         const val url = "https://abit.omsu.ru/abitpage/skripty2021-1?new="
     }
 
-    fun getOmsuParticipants(id: String): Pair<List<OmsuParticipantDto>, OmsuStatisticDto?> {
-        try {
-            val webPage = Jsoup.connect(url + id).get()
+    fun getOmsuParticipants(id: String): Result<Pair<List<OmsuParticipantDto>, OmsuStatisticDto?>> {
+        return kotlin.runCatching {
+            try {
+                val webPage = Jsoup.connect(url + id).get()
 
-            val fields =
-                webPage.getElementsByClass("field-item even")[0].children()
+                val fields =
+                    webPage.getElementsByClass("field-item even")[0].children()
 
-            val nameOfSpecialty = fields[1].text() + fields[2].text() + fields[3].text() + fields[4].text() + fields[5].text()
+                val nameOfSpecialty = fields[1].text() + fields[2].text() + fields[3].text() + fields[4].text() + fields[5].text()
 
-            val numbers = fields[7].text()
+                val numbers = fields[7].text()
 
-            val lastUpdate = fields[10].text()
+                val lastUpdate = fields[10].text()
 
-            val table = webPage.getElementsByClass("stripy")[0]
+                val table = webPage.getElementsByClass("stripy")[0]
 
-            val rows = table.getElementsByTag("tr")
+                val rows = table.getElementsByTag("tr")
 
-            val result = mutableListOf<OmsuParticipantDto>()
+                val result = mutableListOf<OmsuParticipantDto>()
 
-            // without first row
-            for (i in 1 until rows.size) {
-                val row = rows[i]
-                val cells = row.getElementsByTag("td")
+                // without first row
+                for (i in 1 until rows.size) {
+                    val row = rows[i]
+                    val cells = row.getElementsByTag("td")
 
-                result.add(
-                    OmsuParticipantDto(
-                        cells[2].text(),
-                        cells[5].text(),
-                        cells[6].text(),
-                        cells[7].text(),
-                        cells[8].text(),
-                        cells[9].text(),
-                        cells[10].text(),
-                        cells[11].text(),
-                        cells[12].text(),
-                        cells[13].text(),
+                    result.add(
+                        OmsuParticipantDto(
+                            cells[2].text(),
+                            cells[5].text(),
+                            cells[6].text(),
+                            cells[7].text(),
+                            cells[8].text(),
+                            cells[9].text(),
+                            cells[10].text(),
+                            cells[11].text(),
+                            cells[12].text(),
+                            cells[13].text(),
+                        )
+                    )
+                }
+                return Result.success(
+                    result to OmsuStatisticDto(
+                        nameOfSpecialty,
+                        numbers,
+                        lastUpdate
                     )
                 )
+            } catch (e: HttpStatusException) {
+                logger.error { "Error while getting OMSU participants: ${e.statusCode}" }
+                return Result.failure(e)
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                logger.error { "Error while getting OMSU participants, page looks not right: ${e.message}" }
+                return Result.failure(e)
             }
-            return Pair(result, OmsuStatisticDto(nameOfSpecialty, numbers, lastUpdate))
-        } catch (e: HttpStatusException) {
-            logger.error { "Error while getting OMSU participants: ${e.statusCode}" }
-            return Pair(listOf(), null)
         }
     }
 }

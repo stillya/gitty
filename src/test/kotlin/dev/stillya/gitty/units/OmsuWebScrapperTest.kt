@@ -10,7 +10,7 @@ class OmsuWebScrapperTest {
 
     @Test
     fun `should return correct data`() {
-        val result = omsuWebScrapper.getOmsuParticipants("7803") // no exception means that data is correct
+        val result = omsuWebScrapper.getOmsuParticipants("7803").getOrThrow() // no exception means that data is correct
         Assertions.assertEquals(
             "Факультет математики и информационных технологий\\Очная\\ФУНДАМЕНТАЛЬНЫЕ МАТЕМАТИКА И МЕХАНИКА\\Фундаментальная математика(ПЛАН)-ДСПЦ",
             result.second!!.nameOfSpeciality
@@ -22,8 +22,9 @@ class OmsuWebScrapperTest {
         )
     }
 
-    @Test(expected = Exception::class)
+    @Test
     fun `should failed for non exist id`() {
-        omsuWebScrapper.getOmsuParticipants("0") // exception means that data is not correct
+        val result = omsuWebScrapper.getOmsuParticipants("0").isFailure // exception means that data is not correct
+        Assertions.assertTrue(result)
     }
 }

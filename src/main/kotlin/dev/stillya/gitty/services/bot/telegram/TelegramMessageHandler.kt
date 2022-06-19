@@ -106,11 +106,11 @@ class TelegramMessageHandler(
                     )
                 }
                 val number = args[0]
-
+                
                 val participants = omsuWebScrapper.getOmsuParticipants(number)
 
-                return if (participants.first.isNotEmpty()) {
-                    BotMessage(makePrettyTableForTelegram(participants), channel)
+                return if (participants.isSuccess) {
+                    BotMessage(makePrettyTableForTelegram(participants.getOrThrow()), channel)
                 } else {
                     BotMessage(
                         "No participants found", channel
@@ -141,7 +141,8 @@ class TelegramMessageHandler(
                 "-----------------EXAMPLES------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
                 "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
-                "> fromilyawithlove 7856\n" +
+                "> fromilyawithlove 7856(imit, bachelor)\n" +
+                "> fromilyawithlove 7803(imit, speciality)\n" +
                 "> unsubscribe\n" +
                 "> help\n"
 
