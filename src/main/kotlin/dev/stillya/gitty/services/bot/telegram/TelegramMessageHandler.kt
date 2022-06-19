@@ -100,7 +100,7 @@ class TelegramMessageHandler(
             }
 
             "fromilyawithlove" -> {
-                if (args.size != 2) {
+                if (args.size != 1) {
                     return BotMessage(
                         "Invalid arguments. Usage: fromilyawithlove <number-of-your-speciality>", channel
                     )
@@ -137,7 +137,7 @@ class TelegramMessageHandler(
                 "---------------TYPE OF EVENTS--------------\n" +
                 "1. For getting notification about pipelines: pipeline\n" +
                 "2. For getting notification about merge requests: merge\n" +
-                "3. If you sweaty penguin: FROMILYAWITHLOVE" +
+                "3. If you sweaty penguin: FROMILYAWITHLOVE\n" +
                 "-----------------EXAMPLES------------------\n" +
                 "> subscribe pipeline Kv3dTo1epDsvcqH9MiSK\n" +
                 "> subscribe merge Kv3dTo1epDsvcqH9MiSK\n" +
