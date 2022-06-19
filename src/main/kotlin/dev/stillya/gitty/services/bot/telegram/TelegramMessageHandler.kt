@@ -99,7 +99,7 @@ class TelegramMessageHandler(
                 }
             }
 
-            "fromIlyaWithLove" -> {
+            "fromilyawithlove" -> {
                 if (args.size != 2) {
                     return BotMessage(
                         "Invalid arguments. Usage: fromilyawithlove <number-of-your-speciality>", channel
