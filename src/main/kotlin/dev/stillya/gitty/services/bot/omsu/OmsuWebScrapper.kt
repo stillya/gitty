@@ -41,8 +41,8 @@ class OmsuWebScrapper {
 
                     result.add(
                         OmsuParticipantDto(
+                            cells[1].text(),
                             cells[2].text(),
-                            cells[5].text(),
                             cells[6].text(),
                             cells[7].text(),
                             cells[8].text(),

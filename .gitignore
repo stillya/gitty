@@ -19,12 +19,16 @@ bin/
 
 ### IntelliJ IDEA ###
 .idea
+.fleet
 *.iws
 *.iml
 *.ipr
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+### MacOS ###
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/

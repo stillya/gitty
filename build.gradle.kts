@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id("org.springframework.boot") version "2.6.5"
@@ -8,12 +9,25 @@ plugins {
 }
 
 group = "dev.stillya"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "0.0.1"
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(11))
+}
 
 repositories {
-    mavenCentral()
-    maven("https://jitpack.io")
+    mavenLocal()
+    mavenCentral {
+        content {
+            excludeGroup("io.github.kotlin-telegram-bot")
+        }
+    }
+    maven {
+        url = "https://jitpack.io"
+        content {
+            includeGroup("io.github.kotlin-telegram-bot")
+        }
+    }
 }
 
 dependencies {
@@ -40,7 +54,16 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:1.16.3")
     testImplementation("org.testcontainers:junit-jupiter:1.16.3")
     // for M1
-    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.73.Final:osx-x86_64")
+    if (Os.isFamily(Os.FAMILY_MAC)) {
+        runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.73.Final:osx-x86_64")
+    }
+}
+
+val kotlinLanguageVersion = "1.7"
+kotlin {
+    jvmToolchain {
+        languageVersion.set(javaLanguageVersion)
+    }
 }
 
 tasks.withType<KotlinCompile> {

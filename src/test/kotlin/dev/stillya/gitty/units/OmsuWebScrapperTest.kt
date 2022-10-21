@@ -10,7 +10,8 @@ class OmsuWebScrapperTest {
 
     @Test
     fun `should return correct data`() {
-        val result = omsuWebScrapper.getOmsuParticipants("7803").getOrThrow() // no exception means that data is correct
+        val result = omsuWebScrapper.getOmsuParticipants("7856").getOrThrow() // no exception means that data is correct
+        val codeToAgree = result.first.associate { it.code to it.isAgree }
         Assertions.assertEquals(
             "Факультет математики и информационных технологий\\Очная\\ФУНДАМЕНТАЛЬНЫЕ МАТЕМАТИКА И МЕХАНИКА\\Фундаментальная математика(ПЛАН)-ДСПЦ",
             result.second!!.nameOfSpeciality
