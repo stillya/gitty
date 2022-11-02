@@ -8,7 +8,7 @@
   </a>
 </p>
 
-> A small bot for gitlab notification with integration on different platform
+> Small bot for gitlab notification with integration on different platform
 
 ## Usage
 
