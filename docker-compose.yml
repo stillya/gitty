@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   api_service:
-    build: .
+    image: "stillya/gitty:v0.1.2"
     restart: always
     ports:
       - "8088:8088"
