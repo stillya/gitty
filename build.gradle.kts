@@ -3,6 +3,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id("org.springframework.boot") version "2.6.5"
+    // TODO: move to spring platform
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
